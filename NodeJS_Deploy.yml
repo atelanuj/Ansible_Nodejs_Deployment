@@ -1,4 +1,5 @@
 ---
+#Play 1
 - name: install nodeJS and npm on Server
   hosts: 172.31.1.64
   tasks: 
@@ -7,7 +8,7 @@
         pkg :
           - npm
           - nodejs
-
+#Play 2
 - name: Deploy the Nodejs app
   hosts: 172.31.1.64
   become: true

@@ -1,0 +1,33 @@
+---
+- name: install nodeJS and npm on Server
+  hosts: 172.31.1.64
+  tasks: 
+    - name: install nodeJS and npm package
+      apt: 
+        pkg :
+          - npm
+          - nodejs
+
+- name: Deploy the Nodejs app
+  hosts: 172.31.1.64
+  become: true
+  become_user: anuj                                         # below all tasks will be executed as a anuj user on the node for security
+  tasks:
+    - name: Copy the nodejs and extract the TAR file
+      unarchive:                                          # extracting the tar file
+        src: /tmp/anuj/simple-nodejs/nodejs-app-1.0.0.tgz  #From Ansible Server
+        dest: /home/anuj                                    # to nodes user dir
+
+    - name: install Dependencies from package.json
+      npm:
+        path: /home/anuj/package
+    
+    - name: Start the nodejs application
+      command: node /home/anuj/package/app/server.js  
+      async: 1000
+      poll: 0
+
+    - name: ensure the app is runnig
+      shell: ps -aux | grep server                # getting the status of the Nodejs Application
+      register: app_status                        # storing the output in variable
+    - debug: msg={{app_status.stdout_lines}}      # display the output of the ps aux only the std output lines

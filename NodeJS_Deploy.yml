@@ -25,7 +25,7 @@
     
     - name: Start the nodejs application
       command: node /home/anuj/package/app/server.js  
-      async: 1000
+      async: 1000                                       # for runnig the application in the backgroud
       poll: 0
 
     - name: ensure the app is runnig
